@@ -20,7 +20,7 @@
         header {
             background-color: #0056a1;
             text-align: center;
-            padding: 1rem 0;
+            padding: 20px 0;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             position: sticky;
             top: 0;
@@ -29,35 +29,38 @@
 
         header h1 {
             margin: 0;
-            font-size: 2rem;
+            font-size: 2.8rem;
             color: white;
             font-family: 'Poppins', sans-serif;
             font-weight: 600;
         }
 
         header p {
-            font-size: 1rem;
+            font-size: 1.2rem;
             color: #d71a28;
-            margin: 0.5rem 0 0;
+            font-weight: 400;
+            margin-top: 5px;
+            font-family: 'Poppins', sans-serif;
         }
 
         main {
-            padding: 1.5rem 1rem;
+            padding: 30px 20px;
         }
 
         .bmi-calculator {
-            max-width: 400px;
-            background: rgba(255, 255, 255, 0.95);
-            padding: 1.5rem;
-            border-radius: 0.5rem;
+            max-width: 500px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 30px;
+            border-radius: 10px;
             box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
             color: #333;
             margin: 0 auto;
+            font-family: 'Roboto', sans-serif;
         }
 
         .bmi-calculator h2 {
             text-align: center;
-            margin-bottom: 1rem;
+            margin-bottom: 20px;
             color: #0056a1;
             font-family: 'Poppins', sans-serif;
             font-weight: 600;
@@ -65,17 +68,19 @@
 
         label {
             font-weight: bold;
-            margin-top: 1rem;
+            margin-top: 10px;
             display: block;
+            font-family: 'Roboto', sans-serif;
         }
 
         input, select, button {
             width: 100%;
-            padding: 0.8rem;
-            margin-top: 0.5rem;
+            padding: 10px;
+            margin-top: 5px;
             border: 1px solid #ddd;
-            border-radius: 0.4rem;
+            border-radius: 5px;
             font-size: 1rem;
+            font-family: 'Roboto', sans-serif;
         }
 
         button {
@@ -91,8 +96,8 @@
         }
 
         #result {
-            margin-top: 1rem;
-            font-size: 1rem;
+            margin-top: 20px;
+            font-size: 1.2rem;
             font-weight: bold;
             text-align: center;
         }
@@ -100,45 +105,60 @@
         /* Scrolling Facts Section */
         .facts-section {
             background-color: #0056a1;
-            padding: 2rem 1rem;
+            padding: 30px;
             color: white;
             text-align: center;
+            font-family: 'Poppins', sans-serif;
         }
 
         .facts-section h2 {
-            margin-bottom: 1.5rem;
+            margin-bottom: 20px;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
         }
 
         .facts-section ul {
             list-style: none;
             padding: 0;
+            font-family: 'Roboto', sans-serif;
+            font-weight: 300;
         }
 
         .facts-section li {
-            margin: 0.5rem 0;
-            font-size: 1rem;
+            margin: 10px 0;
+            font-size: 1.1rem;
         }
 
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            header h1 {
-                font-size: 1.5rem;
-            }
+        /* Bubble Scroll Effect */
+        .bubble-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
 
-            header p {
-                font-size: 0.9rem;
-            }
+        .bubble {
+            position: absolute;
+            bottom: -100px;
+            width: 20px;
+            height: 20px;
+            background: white;
+            opacity: 0.5;
+            border-radius: 50%;
+            animation: float 10s infinite;
+        }
 
-            .bmi-calculator {
-                padding: 1rem;
+        @keyframes float {
+            0% {
+                transform: translateY(0) translateX(0);
             }
-
-            .facts-section h2 {
-                font-size: 1.5rem;
+            50% {
+                transform: translateY(-200px) translateX(100px);
             }
-
-            .facts-section li {
-                font-size: 0.9rem;
+            100% {
+                transform: translateY(-500px) translateX(-50px);
             }
         }
     </style>
@@ -149,6 +169,11 @@
         <p>Science Fair Project by Abdulwahab Alsaeedi and Qais Alaneezi</p>
         <p>American Gulf Bilingual School</p>
     </header>
+    <div class="bubble-container">
+        <div class="bubble" style="width: 40px; height: 40px; left: 10%;"></div>
+        <div class="bubble" style="width: 30px; height: 30px; left: 50%;"></div>
+        <div class="bubble" style="width: 20px; height: 20px; left: 70%;"></div>
+    </div>
     <main>
         <div class="bmi-calculator">
             <h2>Calculate Your BMI</h2>
@@ -187,11 +212,11 @@
         function calculateBMI() {
             const age = parseInt(document.getElementById('age').value);
             const gender = document.getElementById('gender').value;
-            const height = parseFloat(document.getElementById('height').value) / 100;
+            const height = parseFloat(document.getElementById('height').value) / 100; // Convert to meters
             const weight = parseFloat(document.getElementById('weight').value);
 
             const resultDiv = document.getElementById('result');
-            resultDiv.textContent = '';
+            resultDiv.textContent = ''; // Clear previous result
 
             if (!age || !gender || height <= 0 || weight <= 0) {
                 resultDiv.textContent = 'Please fill out all fields correctly.';
@@ -201,22 +226,31 @@
             const bmi = (weight / (height * height)).toFixed(2);
             let category = '';
             let advice = '';
+            let calories = '';
 
             if (bmi < 18.5) {
                 category = 'Underweight';
                 advice = 'Eat nutrient-dense foods and increase caloric intake.';
+                calories = 'You need about 500 additional calories daily.';
             } else if (bmi < 24.9) {
                 category = 'Normal weight';
                 advice = 'Maintain your current routine for healthy living.';
+                calories = 'You need to maintain your current calorie intake.';
             } else if (bmi < 29.9) {
                 category = 'Overweight';
                 advice = 'Focus on portion control and regular exercise.';
+                calories = 'You should reduce about 500 calories daily to lose weight safely.';
             } else {
                 category = 'Obese';
                 advice = 'Adopt a low-calorie diet and consult a healthcare provider.';
+                calories = 'Reducing 500–1000 calories per day is recommended.';
             }
 
-            resultDiv.innerHTML = `Your BMI is <strong>${bmi}</strong> (${category}).<br><em>${advice}</em>`;
+            resultDiv.innerHTML = `
+                Your BMI is <strong>${bmi}</strong> (${category}).<br>
+                <em>${advice}</em><br>
+                ${calories}
+            `;
         }
     </script>
 </body>
